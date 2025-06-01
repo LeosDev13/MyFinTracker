@@ -1,0 +1,15 @@
+node_modules
+.expo
+__generated__
+
+# Logs
+logs
+*.log
+npm-debug.log*
+*.tsbuildinfo
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
