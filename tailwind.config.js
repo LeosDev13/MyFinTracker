@@ -8,8 +8,10 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        "accent-soft": "#F5EDE5",
-        "primary-dark": "#1F5F43"
+        "soft-pink": "#F5EDE5",
+        "medium-green": "#B8D4B8",
+        "soft-green": "#D8E8D8",
+        "soft-red": "#E8B4C8"
       }
     },
   },

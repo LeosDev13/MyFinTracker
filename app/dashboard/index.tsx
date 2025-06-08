@@ -11,6 +11,7 @@ import { LineChart } from "react-native-chart-kit";
 import Svg, { Circle, G } from "react-native-svg";
 import { BalanceCard } from "../_components/balanceCard";
 
+
 const screenWidth = Dimensions.get("window").width;
 
 const DashboardScreen = () => {
@@ -118,8 +119,8 @@ const DashboardScreen = () => {
   };
 
   return (
-    <View className="flex-1" style={{ backgroundColor: "#F5F5F5" }}>
-      <StatusBar barStyle="dark-content" backgroundColor="#F5F5F5" />
+    <View className="flex-1 bg-soft-pink">
+      <StatusBar barStyle="dark-content" className="bg-soft-pink" />
 
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -140,37 +141,17 @@ const DashboardScreen = () => {
               text="Saldo"
             />
 
-            <View
-              className="flex-1 rounded-xl p-4"
-              style={{ backgroundColor: "#B8D4B8" }}
-            >
-              <Text className="text-2xl font-bold text-gray-900 mb-1">
-                2.450€
-              </Text>
-              <Text className="text-sm font-medium text-gray-700">Saldo</Text>
-            </View>
+            <BalanceCard
+              backgroundColor="#D8E8D8"
+              moneyBalance={3200}
+              text="Ingresos"
+            />
 
-            <View
-              className="flex-1 rounded-xl p-4"
-              style={{ backgroundColor: "#E8B4C8" }}
-            >
-              <Text className="text-2xl font-bold text-gray-900 mb-1">
-                €3.200
-              </Text>
-              <Text className="text-sm font-medium text-gray-700">
-                Ingresos
-              </Text>
-            </View>
-
-            <View
-              className="flex-1 rounded-xl p-4"
-              style={{ backgroundColor: "#D8E8D8" }}
-            >
-              <Text className="text-2xl font-bold text-gray-900 mb-1">
-                €750
-              </Text>
-              <Text className="text-sm font-medium text-gray-700">Gastos</Text>
-            </View>
+            <BalanceCard
+              backgroundColor="#E8B4C8"
+              moneyBalance={750}
+              text="Gastos"
+            />
           </View>
         </View>
 
