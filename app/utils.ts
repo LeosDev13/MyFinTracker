@@ -1,4 +1,4 @@
-export const parseMoney = (value: number, currency: Currency = Currency.EUR) => {
+const parseMoney = (value: number, currency: Currency = Currency.EUR) => {
   const formatter = new Intl.NumberFormat('de-DE', {
     style: 'currency',
     currency: currency,
@@ -9,6 +9,8 @@ export const parseMoney = (value: number, currency: Currency = Currency.EUR) => 
   return formatter.format(value);
 }
 
-export enum Currency {
+enum Currency {
   EUR = "EUR"
 }
+
+export { parseMoney, Currency };

@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Dimensions,
   ScrollView,
@@ -9,12 +8,15 @@ import {
 } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import Svg, { Circle, G } from "react-native-svg";
-import { BalanceCard } from "../_components/balanceCard";
+import { BalanceCard } from "./_components/balanceCard";
+import { useRouter } from "expo-router";
 
 
 const screenWidth = Dimensions.get("window").width;
 
 const DashboardScreen = () => {
+  const router = useRouter();
+
   const lineData = {
     labels: ["1", "5", "10", "15", "20", "25"],
     datasets: [
@@ -72,34 +74,36 @@ const DashboardScreen = () => {
     let cumulativePercentage = 0;
 
     return (
-      <View className="items-center">
-        <Svg width={size} height={size}>
-          <G rotation="-90" origin={`${size / 2}, ${size / 2}`}>
-            {data.map((item, index) => {
-              const strokeDasharray = `${(circumference * item.percentage) / 100} ${circumference}`;
-              const strokeDashoffset = -(
-                (circumference * cumulativePercentage) /
-                100
-              );
-              cumulativePercentage += item.percentage;
+      <View className="items-center flex-row">
+        <View className="flex-1">
+          <Svg width={size} height={size}>
+            <G rotation="-90" origin={`${size / 2}, ${size / 2}`}>
+              {data.map((item, index) => {
+                const strokeDasharray = `${(circumference * item.percentage) / 100} ${circumference}`;
+                const strokeDashoffset = -(
+                  (circumference * cumulativePercentage) /
+                  100
+                );
+                cumulativePercentage += item.percentage;
 
-              return (
-                <Circle
-                  key={index}
-                  cx={size / 2}
-                  cy={size / 2}
-                  r={radius}
-                  stroke={item.color}
-                  strokeWidth={strokeWidth}
-                  fill="transparent"
-                  strokeDasharray={strokeDasharray}
-                  strokeDashoffset={strokeDashoffset}
-                  strokeLinecap="butt"
-                />
-              );
-            })}
-          </G>
-        </Svg>
+                return (
+                  <Circle
+                    key={index}
+                    cx={size / 2}
+                    cy={size / 2}
+                    r={radius}
+                    stroke={item.color}
+                    strokeWidth={strokeWidth}
+                    fill="transparent"
+                    strokeDasharray={strokeDasharray}
+                    strokeDashoffset={strokeDashoffset}
+                    strokeLinecap="butt"
+                  />
+                );
+              })}
+            </G>
+          </Svg>
+        </View>
 
         <View className="mt-5 ml-8">
           {data.map((item, index) => (
@@ -130,7 +134,6 @@ const DashboardScreen = () => {
           <Text className="text-3xl font-bold text-gray-900 mb-0.5">
             MyFinTracker
           </Text>
-          <Text className="text-base text-gray-600 font-normal">Dashboard</Text>
         </View>
 
         <View className="px-6 mb-5">
@@ -197,91 +200,12 @@ const DashboardScreen = () => {
             <View className="flex-row items-center justify-center">
               <Text className="text-white text-lg font-medium mr-2">+</Text>
               <Text className="text-white font-medium text-base">
-                Nuevo Movimiento
-              </Text>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            className="rounded-xl py-4 px-6"
-            style={{ backgroundColor: "#D8E8D8" }}
-          >
-            <View className="flex-row items-center justify-center">
-              <Text className="text-base mr-2" style={{ color: "#226140" }}>
-                📅
-              </Text>
-              <Text
-                className="font-medium text-base"
-                style={{ color: "#226140" }}
-              >
-                Configurar Fecha de Inicio
+                Add widget
               </Text>
             </View>
           </TouchableOpacity>
         </View>
       </ScrollView>
-
-      <View className="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-100">
-        <View className="flex-row justify-around items-center px-6 py-2">
-          <TouchableOpacity className="items-center py-2 flex-1">
-            <View className="w-6 h-6 mb-1 items-center justify-center">
-              <View
-                className="w-5 h-5 bg-transparent border-2 border-gray-400"
-                style={{
-                  borderTopWidth: 2,
-                  borderLeftWidth: 2,
-                  borderRightWidth: 2,
-                  borderBottomWidth: 1.5,
-                  transform: [{ rotate: "0deg" }],
-                }}
-              />
-            </View>
-            <Text className="text-xs font-medium text-gray-700">Inicio</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity className="items-center py-2 flex-1">
-            <View className="w-6 h-6 mb-1 items-center justify-center">
-              <View>
-                <View className="w-4 h-0.5 bg-gray-400 mb-1" />
-                <View className="w-4 h-0.5 bg-gray-400 mb-1" />
-                <View className="w-4 h-0.5 bg-gray-400" />
-              </View>
-            </View>
-            <Text className="text-xs text-gray-500 font-medium">
-              Movimientos
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity className="items-center py-2 flex-1">
-            <View className="w-6 h-6 mb-1 items-center justify-center">
-              <View className="flex-row items-end space-x-0.5">
-                <View className="w-1 h-2 bg-gray-400" />
-                <View className="w-1 h-3 bg-gray-400" />
-                <View className="w-1 h-4 bg-gray-400" />
-                <View className="w-1 h-2 bg-gray-400" />
-              </View>
-            </View>
-            <Text className="text-xs text-gray-500 font-medium">
-              Presupuesto
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity className="items-center py-2 flex-1">
-            <View className="w-6 h-6 mb-1 items-center justify-center">
-              <View className="w-5 h-5 border-2 border-gray-400 rounded-full relative">
-                <View className="absolute top-1 left-1 w-1 h-1 bg-gray-400 rounded-full" />
-                <View className="absolute top-1 right-1 w-1 h-1 bg-gray-400 rounded-full" />
-                <View className="absolute bottom-1 left-1.5 right-1.5 h-0.5 bg-gray-400" />
-              </View>
-            </View>
-            <Text className="text-xs text-gray-500 font-medium">Ajustes</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View className="items-center pb-2">
-          <View className="w-32 h-1 bg-black rounded-full"></View>
-        </View>
-      </View>
     </View>
   );
 };
