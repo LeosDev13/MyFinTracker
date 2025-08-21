@@ -4,19 +4,23 @@ import TouchableIcon from './touchableIcon';
 
 type MenuItem = {
   onPress: () => void;
-  Icon: React.ComponentType<any>;
+  Icon: React.ComponentType<{ size?: number; color?: string }>;
 };
 
 type MenuBarProps = {
   items: MenuItem[];
 };
 
-const MenuBar = ({ items }: MenuBarProps) => {
+const MenuBar = React.memo(({ items }: MenuBarProps) => {
   return (
     <View className="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-100">
       <View className="flex-row justify-around items-center px-6 py-2">
         {items.map((item, index) => (
-          <TouchableIcon key={index} onPress={item.onPress} Icon={item.Icon} />
+          <TouchableIcon
+            key={`${item.onPress.toString()}-${index}`}
+            onPress={item.onPress}
+            Icon={item.Icon}
+          />
         ))}
       </View>
 
@@ -25,6 +29,6 @@ const MenuBar = ({ items }: MenuBarProps) => {
       </View>
     </View>
   );
-};
+});
 
 export default MenuBar;

@@ -1,12 +1,12 @@
 import React from 'react';
-import { TouchableOpacity, View, GestureResponderEvent } from 'react-native';
+import { type GestureResponderEvent, TouchableOpacity, View } from 'react-native';
 
 type IconButtonProps = {
   onPress: (event: GestureResponderEvent) => void;
-  Icon: React.ComponentType<any>;
+  Icon: React.ComponentType<{ size?: number; color?: string }>;
 };
 
-const TouchableIcon = ({ onPress, Icon }: IconButtonProps) => {
+const TouchableIcon = React.memo(({ onPress, Icon }: IconButtonProps) => {
   return (
     <TouchableOpacity
       className="text-center items-center justify-center min-h-[40px]"
@@ -17,6 +17,6 @@ const TouchableIcon = ({ onPress, Icon }: IconButtonProps) => {
       </View>
     </TouchableOpacity>
   );
-};
+});
 
 export default TouchableIcon;

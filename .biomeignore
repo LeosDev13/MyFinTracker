@@ -1,0 +1,11 @@
+node_modules/
+.expo/
+dist/
+build/
+coverage/
+*.log
+.expo-shared/
+.vscode/
+.idea/
+*.tmp
+*.temp
