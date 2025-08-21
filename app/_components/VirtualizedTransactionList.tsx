@@ -30,11 +30,12 @@ interface VirtualizedTransactionListProps {
   contentContainerStyle?: StyleProp<ViewStyle>;
 }
 
-// Constantes para optimización
+// Constantes para optimización de memoria y rendimiento
 const ITEM_HEIGHT = 80; // Altura aproximada de cada item
-const INITIAL_NUM_TO_RENDER = 10;
-const MAX_TO_RENDER_PER_BATCH = 5;
-const WINDOW_SIZE = 10;
+const INITIAL_NUM_TO_RENDER = 8; // Reducido para mejor memoria inicial
+const MAX_TO_RENDER_PER_BATCH = 3; // Reducido para evitar spikes de memoria
+const WINDOW_SIZE = 8; // Reducido para menor uso de memoria
+const SCROLL_EVENT_THROTTLE = 100; // Throttle para scroll events
 
 const VirtualizedTransactionList = React.memo(
   ({
@@ -156,11 +157,22 @@ const VirtualizedTransactionList = React.memo(
         // Styling
         contentContainerStyle={contentContainerStyle}
         showsVerticalScrollIndicator={false}
-        // Additional optimizations
+        // Additional memory and performance optimizations
         maintainVisibleContentPosition={{
           minIndexForVisible: 0,
           autoscrollToTopThreshold: 10,
         }}
+        scrollEventThrottle={SCROLL_EVENT_THROTTLE}
+        // Memory optimization settings
+        disableVirtualization={false}
+        legacyImplementation={false}
+        // Reduce memory pressure
+        maxToRenderPerBatch={MAX_TO_RENDER_PER_BATCH}
+        initialNumToRender={INITIAL_NUM_TO_RENDER}
+        windowSize={WINDOW_SIZE}
+        // Performance optimizations
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
       />
     );
   }

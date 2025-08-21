@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Alert, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import { useApp, useSettings } from '../src/context';
 import AddCategoryModal from './_components/AddCategoryModal';
+import MemoryStatsViewer from './_components/MemoryStatsViewer';
 import Toast from './_components/Toast';
 
 const SettingsScreen = () => {
@@ -225,6 +226,9 @@ const SettingsScreen = () => {
             </View>
           ))}
         </View>
+
+        {/* Memory Stats (Development Only) */}
+        <MemoryStatsViewer />
 
         {/* App Info Section */}
         <View className="mx-6 mb-5 bg-white rounded-xl p-6 shadow-sm">

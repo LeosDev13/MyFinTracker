@@ -34,10 +34,11 @@ export interface AppState {
   currencies: Currency[];
   transactionTypes: TransactionType[];
 
-  // Pagination
+  // Pagination & Memory Management
   transactionsCount: number;
   currentPage: number;
   itemsPerPage: number;
+  maxInMemoryTransactions: number;
 
   // Loading states
   loading: LoadingState;
@@ -77,6 +78,14 @@ export interface AppContextType {
   // General actions
   refreshAll: () => Promise<void>;
   clearError: (type: keyof ErrorState) => void;
+  
+  // Memory management
+  cleanupMemory: () => void;
+  getMemoryStats: () => {
+    transactionCount: number;
+    maxTransactions: number;
+    memoryUsage: string;
+  };
 }
 
 // Action types
@@ -100,7 +109,8 @@ type AppAction =
   | { type: 'SET_TRANSACTION_TYPES'; payload: TransactionType[] }
   | { type: 'SET_PAGE'; payload: number }
   | { type: 'SET_REFRESHING'; payload: boolean }
-  | { type: 'CALCULATE_TOTALS' };
+  | { type: 'CALCULATE_TOTALS' }
+  | { type: 'CLEANUP_MEMORY' };
 
 // Initial state
 const initialState: AppState = {
@@ -111,6 +121,7 @@ const initialState: AppState = {
   transactionsCount: 0,
   currentPage: 1,
   itemsPerPage: 20,
+  maxInMemoryTransactions: 100, // Limit in-memory transactions to prevent memory leaks
   loading: {
     transactions: false,
     categories: false,
@@ -155,9 +166,23 @@ function appReducer(state: AppState, action: AppAction): AppState {
       };
 
     case 'SET_TRANSACTIONS': {
+      let transactions = action.payload.transactions;
+      
+      // Auto-cleanup if we exceed memory limit
+      if (transactions.length > state.maxInMemoryTransactions) {
+        const sortedTransactions = [...transactions].sort(
+          (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+        );
+        transactions = sortedTransactions.slice(0, state.maxInMemoryTransactions);
+        
+        console.log(
+          `🧹 Auto-cleanup: limited transactions to ${transactions.length}/${action.payload.transactions.length}`
+        );
+      }
+      
       const newState = {
         ...state,
-        transactions: action.payload.transactions,
+        transactions,
         transactionsCount: action.payload.count,
       };
       return calculateTotals(newState);
@@ -235,6 +260,25 @@ function appReducer(state: AppState, action: AppAction): AppState {
 
     case 'CALCULATE_TOTALS':
       return calculateTotals(state);
+
+    case 'CLEANUP_MEMORY': {
+      // Keep only the most recent transactions in memory
+      const maxTransactions = state.maxInMemoryTransactions;
+      const sortedTransactions = [...state.transactions].sort(
+        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+      );
+      
+      const trimmedTransactions = sortedTransactions.slice(0, maxTransactions);
+      
+      console.log(
+        `🧹 Memory cleanup: reduced transactions from ${state.transactions.length} to ${trimmedTransactions.length}`
+      );
+      
+      return calculateTotals({
+        ...state,
+        transactions: trimmedTransactions,
+      });
+    }
 
     default:
       return state;
@@ -533,6 +577,23 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     dispatch({ type: 'SET_ERROR', payload: { key: type, value: null } });
   }, []);
 
+  // Memory management methods
+  const cleanupMemory = useCallback((): void => {
+    dispatch({ type: 'CLEANUP_MEMORY' });
+  }, []);
+
+  const getMemoryStats = useCallback(() => {
+    const transactionCount = state.transactions.length;
+    const maxTransactions = state.maxInMemoryTransactions;
+    const memoryUsage = `${Math.round((transactionCount / maxTransactions) * 100)}%`;
+    
+    return {
+      transactionCount,
+      maxTransactions,
+      memoryUsage,
+    };
+  }, [state.transactions.length, state.maxInMemoryTransactions]);
+
   // Initialize data on mount
   useEffect(() => {
     if (!isInitialized) {
@@ -554,6 +615,8 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     refreshCurrencies,
     refreshAll,
     clearError,
+    cleanupMemory,
+    getMemoryStats,
   };
 
   return <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>;
