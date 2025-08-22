@@ -1,6 +1,7 @@
 import type * as SQLite from 'expo-sqlite';
 import type { Transaction } from '../db/database';
 import { BaseRepository } from './base/IRepository';
+import { buildSafeUpdateClause } from './base/SqlSafetyUtil';
 
 export interface TransactionFilters {
   startDate?: string;
@@ -135,16 +136,17 @@ export class TransactionRepository extends BaseRepository<Transaction, string> {
         this.validateTransaction(merged);
       }
 
-      const fields = Object.keys(updates);
-      const values = Object.values(updates);
+      // Add updated_at timestamp
+      const updatesWithTimestamp = {
+        ...updates,
+        updated_at: new Date().toISOString(),
+      };
 
-      if (fields.length === 0) return;
+      // Build safe parameterized query with column validation
+      const { setClause, values } = buildSafeUpdateClause('transactions', updatesWithTimestamp);
 
-      // Add updated_at
-      fields.push('updated_at');
-      values.push(new Date().toISOString());
+      if (!setClause) return; // No valid fields to update
 
-      const setClause = fields.map((field) => `${field} = ?`).join(', ');
       await this.db.runAsync(`UPDATE transactions SET ${setClause} WHERE id = ?`, [...values, id]);
     } catch (error) {
       console.error('Failed to update transaction:', error);

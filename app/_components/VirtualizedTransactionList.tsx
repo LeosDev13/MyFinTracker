@@ -166,10 +166,6 @@ const VirtualizedTransactionList = React.memo(
         // Memory optimization settings
         disableVirtualization={false}
         legacyImplementation={false}
-        // Reduce memory pressure
-        maxToRenderPerBatch={MAX_TO_RENDER_PER_BATCH}
-        initialNumToRender={INITIAL_NUM_TO_RENDER}
-        windowSize={WINDOW_SIZE}
         // Performance optimizations
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"

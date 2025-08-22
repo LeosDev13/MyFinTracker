@@ -55,13 +55,15 @@ export const useVirtualPagination = (
   } = config;
 
   const { handleError } = useErrorHandler();
-  
-  const cache = useRef(new TransactionCache({
-    maxInMemoryItems,
-    windowSize,
-    preloadBuffer,
-  }));
-  
+
+  const cache = useRef(
+    new TransactionCache({
+      maxInMemoryItems,
+      windowSize,
+      preloadBuffer,
+    })
+  );
+
   const [state, setState] = useState<VirtualPaginationState>({
     visibleTransactions: [],
     totalCount: 0,
@@ -86,8 +88,8 @@ export const useVirtualPagination = (
     );
 
     const stats = cache.current.getStats();
-    
-    setState(prev => ({
+
+    setState((prev) => ({
       ...prev,
       visibleTransactions: transactions,
       cacheStats: {
@@ -98,54 +100,56 @@ export const useVirtualPagination = (
   }, [visibleRange]);
 
   // Load a specific range of transactions
-  const loadRange = useCallback(async (startIndex: number, count: number): Promise<void> => {
-    const rangeKey = `${startIndex}-${count}`;
-    
-    // Prevent duplicate loading
-    if (loadingRanges.current.has(rangeKey)) {
-      return;
-    }
+  const loadRange = useCallback(
+    async (startIndex: number, count: number): Promise<void> => {
+      const rangeKey = `${startIndex}-${count}`;
 
-    // Check if range is already cached
-    if (cache.current.isRangeCached(startIndex, count)) {
-      updateVisibleTransactions();
-      return;
-    }
-
-    loadingRanges.current.add(rangeKey);
-    setState(prev => ({ ...prev, isLoading: true, error: null }));
-
-    try {
-      const missingRanges = cache.current.getMissingRanges(startIndex, count);
-      
-      // Load all missing ranges
-      for (const range of missingRanges) {
-        const result = await loadTransactions(range.count, range.start);
-        cache.current.addTransactions(result.transactions, range.start, result.totalCount);
-        
-        setState(prev => ({
-          ...prev,
-          totalCount: result.totalCount,
-          hasNextPage: range.start + result.transactions.length < result.totalCount,
-        }));
+      // Prevent duplicate loading
+      if (loadingRanges.current.has(rangeKey)) {
+        return;
       }
 
-      updateVisibleTransactions();
+      // Check if range is already cached
+      if (cache.current.isRangeCached(startIndex, count)) {
+        updateVisibleTransactions();
+        return;
+      }
 
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to load transactions';
-      await handleError(error as Error, { showToast: true });
-      setState(prev => ({ ...prev, error: errorMessage }));
-    } finally {
-      loadingRanges.current.delete(rangeKey);
-      setState(prev => ({ ...prev, isLoading: false }));
-    }
-  }, [loadTransactions, handleError, updateVisibleTransactions]);
+      loadingRanges.current.add(rangeKey);
+      setState((prev) => ({ ...prev, isLoading: true, error: null }));
+
+      try {
+        const missingRanges = cache.current.getMissingRanges(startIndex, count);
+
+        // Load all missing ranges
+        for (const range of missingRanges) {
+          const result = await loadTransactions(range.count, range.start);
+          cache.current.addTransactions(result.transactions, range.start, result.totalCount);
+
+          setState((prev) => ({
+            ...prev,
+            totalCount: result.totalCount,
+            hasNextPage: range.start + result.transactions.length < result.totalCount,
+          }));
+        }
+
+        updateVisibleTransactions();
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Failed to load transactions';
+        await handleError(error as Error, { showToast: true });
+        setState((prev) => ({ ...prev, error: errorMessage }));
+      } finally {
+        loadingRanges.current.delete(rangeKey);
+        setState((prev) => ({ ...prev, isLoading: false }));
+      }
+    },
+    [loadTransactions, handleError, updateVisibleTransactions]
+  );
 
   // Refresh all data
   const refresh = useCallback(async (): Promise<void> => {
-    setState(prev => ({ ...prev, isRefreshing: true, error: null }));
-    
+    setState((prev) => ({ ...prev, isRefreshing: true, error: null }));
+
     try {
       cache.current.clear();
       setVisibleRange({ start: 0, end: pageSize - 1 });
@@ -153,7 +157,7 @@ export const useVirtualPagination = (
     } catch (error) {
       await handleError(error as Error, { showToast: true });
     } finally {
-      setState(prev => ({ ...prev, isRefreshing: false }));
+      setState((prev) => ({ ...prev, isRefreshing: false }));
     }
   }, [loadRange, pageSize, handleError]);
 
@@ -165,56 +169,68 @@ export const useVirtualPagination = (
 
     const nextStart = cache.current.getStats().cacheSize;
     await loadRange(nextStart, pageSize);
-    
+
     // Extend visible range to include new items
-    setVisibleRange(prev => ({
+    setVisibleRange((prev) => ({
       start: prev.start,
       end: Math.max(prev.end, nextStart + pageSize - 1),
     }));
   }, [state.isLoading, state.hasNextPage, loadRange, pageSize]);
 
   // Add a new transaction (typically at the beginning)
-  const addTransaction = useCallback((transaction: TransactionWithCompensation): void => {
-    cache.current.addTransaction(transaction, 0);
-    setState(prev => ({
-      ...prev,
-      totalCount: prev.totalCount + 1,
-    }));
-    updateVisibleTransactions();
-  }, [updateVisibleTransactions]);
-
-  // Update an existing transaction
-  const updateTransaction = useCallback((transaction: TransactionWithCompensation): void => {
-    cache.current.updateTransaction(transaction);
-    updateVisibleTransactions();
-  }, [updateVisibleTransactions]);
-
-  // Remove a transaction
-  const removeTransaction = useCallback((transactionId: string): void => {
-    if (cache.current.removeTransaction(transactionId)) {
-      setState(prev => ({
+  const addTransaction = useCallback(
+    (transaction: TransactionWithCompensation): void => {
+      cache.current.addTransaction(transaction, 0);
+      setState((prev) => ({
         ...prev,
-        totalCount: Math.max(0, prev.totalCount - 1),
+        totalCount: prev.totalCount + 1,
       }));
       updateVisibleTransactions();
-    }
-  }, [updateVisibleTransactions]);
+    },
+    [updateVisibleTransactions]
+  );
+
+  // Update an existing transaction
+  const updateTransaction = useCallback(
+    (transaction: TransactionWithCompensation): void => {
+      cache.current.updateTransaction(transaction);
+      updateVisibleTransactions();
+    },
+    [updateVisibleTransactions]
+  );
+
+  // Remove a transaction
+  const removeTransaction = useCallback(
+    (transactionId: string): void => {
+      if (cache.current.removeTransaction(transactionId)) {
+        setState((prev) => ({
+          ...prev,
+          totalCount: Math.max(0, prev.totalCount - 1),
+        }));
+        updateVisibleTransactions();
+      }
+    },
+    [updateVisibleTransactions]
+  );
 
   // Get current visible range
   const getVisibleRange = useCallback(() => visibleRange, [visibleRange]);
 
   // Prefetch data around a specific index
-  const prefetchAroundIndex = useCallback(async (index: number): Promise<void> => {
-    if (!enablePrefetch) return;
+  const prefetchAroundIndex = useCallback(
+    async (index: number): Promise<void> => {
+      if (!enablePrefetch) return;
 
-    const prefetchStart = Math.max(0, index - preloadBuffer);
-    const prefetchEnd = Math.min(state.totalCount - 1, index + preloadBuffer);
-    const prefetchCount = prefetchEnd - prefetchStart + 1;
+      const prefetchStart = Math.max(0, index - preloadBuffer);
+      const prefetchEnd = Math.min(state.totalCount - 1, index + preloadBuffer);
+      const prefetchCount = prefetchEnd - prefetchStart + 1;
 
-    if (prefetchCount > 0) {
-      await loadRange(prefetchStart, prefetchCount);
-    }
-  }, [enablePrefetch, preloadBuffer, state.totalCount, loadRange]);
+      if (prefetchCount > 0) {
+        await loadRange(prefetchStart, prefetchCount);
+      }
+    },
+    [enablePrefetch, preloadBuffer, state.totalCount, loadRange]
+  );
 
   // Initialize with first page
   useEffect(() => {

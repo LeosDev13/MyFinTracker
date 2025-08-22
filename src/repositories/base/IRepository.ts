@@ -1,5 +1,6 @@
 import type * as SQLite from 'expo-sqlite';
 import { v4 as uuidv4 } from 'uuid';
+import { validateSqlIdentifier } from './SqlSafetyUtil';
 
 export interface IRepository<T, K = string> {
   findById(id: K): Promise<T | null>;
@@ -15,6 +16,10 @@ export abstract class BaseRepository<T, K = string> implements IRepository<T, K>
   protected tableName: string;
 
   constructor(db: SQLite.SQLiteDatabase, tableName: string) {
+    // Validate table name to prevent injection
+    if (!validateSqlIdentifier(tableName)) {
+      throw new Error(`Invalid table name: ${tableName}`);
+    }
     this.db = db;
     this.tableName = tableName;
   }

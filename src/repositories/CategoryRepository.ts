@@ -1,6 +1,7 @@
 import type * as SQLite from 'expo-sqlite';
 import type { Category } from '../db/database';
 import { BaseRepository } from './base/IRepository';
+import { buildSafeUpdateClause } from './base/SqlSafetyUtil';
 
 export interface CategoryUsage {
   categoryId: string;
@@ -96,12 +97,11 @@ export class CategoryRepository extends BaseRepository<Category, string> {
         }
       }
 
-      const fields = Object.keys(updates);
-      const values = Object.values(updates);
+      // Build safe parameterized query with column validation
+      const { setClause, values } = buildSafeUpdateClause('category', updates);
 
-      if (fields.length === 0) return;
+      if (!setClause) return; // No valid fields to update
 
-      const setClause = fields.map((field) => `${field} = ?`).join(', ');
       await this.db.runAsync(`UPDATE category SET ${setClause} WHERE id = ?`, [...values, id]);
     } catch (error) {
       console.error('Failed to update category:', error);

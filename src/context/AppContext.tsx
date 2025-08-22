@@ -78,7 +78,7 @@ export interface AppContextType {
   // General actions
   refreshAll: () => Promise<void>;
   clearError: (type: keyof ErrorState) => void;
-  
+
   // Memory management
   cleanupMemory: () => void;
   getMemoryStats: () => {
@@ -167,19 +167,19 @@ function appReducer(state: AppState, action: AppAction): AppState {
 
     case 'SET_TRANSACTIONS': {
       let transactions = action.payload.transactions;
-      
+
       // Auto-cleanup if we exceed memory limit
       if (transactions.length > state.maxInMemoryTransactions) {
         const sortedTransactions = [...transactions].sort(
           (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
         );
         transactions = sortedTransactions.slice(0, state.maxInMemoryTransactions);
-        
+
         console.log(
           `🧹 Auto-cleanup: limited transactions to ${transactions.length}/${action.payload.transactions.length}`
         );
       }
-      
+
       const newState = {
         ...state,
         transactions,
@@ -267,13 +267,13 @@ function appReducer(state: AppState, action: AppAction): AppState {
       const sortedTransactions = [...state.transactions].sort(
         (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
       );
-      
+
       const trimmedTransactions = sortedTransactions.slice(0, maxTransactions);
-      
+
       console.log(
         `🧹 Memory cleanup: reduced transactions from ${state.transactions.length} to ${trimmedTransactions.length}`
       );
-      
+
       return calculateTotals({
         ...state,
         transactions: trimmedTransactions,
@@ -586,7 +586,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     const transactionCount = state.transactions.length;
     const maxTransactions = state.maxInMemoryTransactions;
     const memoryUsage = `${Math.round((transactionCount / maxTransactions) * 100)}%`;
-    
+
     return {
       transactionCount,
       maxTransactions,

@@ -1,9 +1,14 @@
 import { TrendingUp, X } from 'lucide-react-native';
-import React, { useMemo } from 'react';
+import type React from 'react';
+import { useMemo, Suspense } from 'react';
 import { Dimensions, Text, TouchableOpacity, View } from 'react-native';
-import { LineChart } from 'react-native-chart-kit';
 import { useApp, useSettings } from '../../../src/context';
 import type { WidgetProps } from '../../../src/types/widget';
+import {
+  LazyLineChart,
+  ChartSkeleton,
+  ChartErrorFallback,
+} from '../../../src/utils/ChartLazyLoader';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -151,27 +156,29 @@ const BalanceTrendWidget: React.FC<WidgetProps> = ({ widget, onRemove }) => {
       )}
 
       <View className="-mx-2">
-        <LineChart
-          data={chartData}
-          width={screenWidth - 64}
-          height={140}
-          chartConfig={chartConfig}
-          bezier={false}
-          style={{
-            borderRadius: 0,
-            marginLeft: -8,
-          }}
-          withDots={true}
-          withInnerLines={false}
-          withOuterLines={false}
-          withVerticalLines={false}
-          withHorizontalLines={true}
-          withVerticalLabels={true}
-          withHorizontalLabels={true}
-          fromZero={false}
-          segments={3}
-          yAxisInterval={1}
-        />
+        <Suspense fallback={<ChartSkeleton height={140} width={screenWidth - 64} />}>
+          <LazyLineChart
+            data={chartData}
+            width={screenWidth - 64}
+            height={140}
+            chartConfig={chartConfig}
+            bezier={false}
+            style={{
+              borderRadius: 0,
+              marginLeft: -8,
+            }}
+            withDots={true}
+            withInnerLines={false}
+            withOuterLines={false}
+            withVerticalLines={false}
+            withHorizontalLines={true}
+            withVerticalLabels={true}
+            withHorizontalLabels={true}
+            fromZero={false}
+            segments={3}
+            yAxisInterval={1}
+          />
+        </Suspense>
       </View>
     </View>
   );

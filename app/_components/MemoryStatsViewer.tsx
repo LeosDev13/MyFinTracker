@@ -67,7 +67,7 @@ const MemoryStatsViewer: React.FC = () => {
           <MemoryStick size={20} color="#6366F1" />
           <Text className="text-lg font-bold text-gray-900 ml-2">Memory Usage</Text>
         </View>
-        
+
         <TouchableOpacity
           onPress={handleCleanup}
           className="flex-row items-center bg-indigo-100 px-3 py-2 rounded-lg"
@@ -87,11 +87,9 @@ const MemoryStatsViewer: React.FC = () => {
         <View className={`p-4 rounded-lg ${getMemoryBgColor()}`}>
           <View className="flex-row items-center justify-between mb-2">
             <Text className="text-sm font-medium text-gray-700">Memory Usage</Text>
-            <Text className={`text-lg font-bold ${getMemoryColor()}`}>
-              {stats.memoryUsage}
-            </Text>
+            <Text className={`text-lg font-bold ${getMemoryColor()}`}>{stats.memoryUsage}</Text>
           </View>
-          
+
           {/* Progress Bar */}
           <View className="w-full bg-gray-200 rounded-full h-2">
             <View
@@ -99,8 +97,8 @@ const MemoryStatsViewer: React.FC = () => {
                 parseInt(stats.memoryUsage.replace('%', '')) < 50
                   ? 'bg-green-500'
                   : parseInt(stats.memoryUsage.replace('%', '')) < 80
-                  ? 'bg-yellow-500'
-                  : 'bg-red-500'
+                    ? 'bg-yellow-500'
+                    : 'bg-red-500'
               }`}
               style={{
                 width: stats.memoryUsage,
@@ -113,13 +111,9 @@ const MemoryStatsViewer: React.FC = () => {
         <View className="flex-row justify-between items-center p-4 bg-blue-50 rounded-lg">
           <View className="flex-row items-center">
             <TrendingUp size={16} color="#3B82F6" />
-            <Text className="text-sm font-medium text-gray-700 ml-2">
-              Transactions in Memory
-            </Text>
+            <Text className="text-sm font-medium text-gray-700 ml-2">Transactions in Memory</Text>
           </View>
-          <Text className="text-blue-700 font-bold">
-            {stats.transactionCount.toLocaleString()}
-          </Text>
+          <Text className="text-blue-700 font-bold">{stats.transactionCount.toLocaleString()}</Text>
         </View>
 
         {/* Limit Info */}
@@ -133,14 +127,11 @@ const MemoryStatsViewer: React.FC = () => {
 
       {/* Memory Tips */}
       <View className="mt-4 p-3 bg-indigo-50 rounded-lg">
-        <Text className="text-indigo-800 font-medium text-sm mb-1">
-          💡 Memory Tips
-        </Text>
+        <Text className="text-indigo-800 font-medium text-sm mb-1">💡 Memory Tips</Text>
         <Text className="text-indigo-600 text-xs">
-          • Memory usage above 80% may slow down the app{'\n'}
-          • Cleanup removes older transactions from memory{'\n'}
-          • All data remains safe in the database{'\n'}
-          • Auto-cleanup happens at {stats.maxTransactions} transactions
+          • Memory usage above 80% may slow down the app{'\n'}• Cleanup removes older transactions
+          from memory{'\n'}• All data remains safe in the database{'\n'}• Auto-cleanup happens at{' '}
+          {stats.maxTransactions} transactions
         </Text>
       </View>
 

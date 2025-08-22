@@ -108,13 +108,13 @@ export class TransactionCache {
    */
   isRangeCached(startIndex: number, count: number): boolean {
     const endIndex = startIndex + count - 1;
-    
+
     for (let i = startIndex; i <= endIndex; i++) {
       if (!this.cache.has(i)) {
         return false;
       }
     }
-    
+
     return true;
   }
 
@@ -245,8 +245,7 @@ export class TransactionCache {
   private updateWindows(newWindow: CacheWindow): void {
     // Remove overlapping windows
     this.windows = this.windows.filter(
-      (window) =>
-        window.endIndex < newWindow.startIndex || window.startIndex > newWindow.endIndex
+      (window) => window.endIndex < newWindow.startIndex || window.startIndex > newWindow.endIndex
     );
 
     // Add new window
@@ -271,11 +270,14 @@ export class TransactionCache {
     const sortedIndices = Array.from(this.cache.keys()).sort((a, b) => a - b);
     const midPoint = Math.floor(sortedIndices.length / 2);
     const keepStart = Math.max(0, midPoint - Math.floor(this.config.maxInMemoryItems / 2));
-    const keepEnd = Math.min(sortedIndices.length - 1, keepStart + this.config.maxInMemoryItems - 1);
+    const keepEnd = Math.min(
+      sortedIndices.length - 1,
+      keepStart + this.config.maxInMemoryItems - 1
+    );
 
     // Create new cache with only the items we want to keep
     const newCache = new Map<number, TransactionWithCompensation>();
-    
+
     for (let i = keepStart; i <= keepEnd; i++) {
       const index = sortedIndices[i];
       const transaction = this.cache.get(index);
