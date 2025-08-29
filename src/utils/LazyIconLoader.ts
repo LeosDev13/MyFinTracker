@@ -4,9 +4,7 @@
  * Only loads icons when they're actually needed
  */
 
-import type { LucideIcon } from "lucide-react-native";
-import { useEffect, useState } from "react";
-
+import type { LucideIcon } from 'lucide-react-native';
 // Import all required icons statically for React Native compatibility
 import {
   AlertCircle,
@@ -45,7 +43,8 @@ import {
   Wallet,
   X,
   Zap,
-} from "lucide-react-native";
+} from 'lucide-react-native';
+import { useEffect, useState } from 'react';
 
 // Cache for loaded icons to prevent re-lookups
 const iconCache = new Map<string, LucideIcon>();
@@ -89,34 +88,34 @@ const ICON_MAP: Record<string, LucideIcon> = {
   Zap,
   PiggyBank,
   // Support for kebab-case icon names
-  "pie-chart": PieChart,
-  "trending-up": TrendingUp,
-  "trending-down": TrendingDown,
-  "bar-chart-3": BarChart3,
-  "piggy-bank": PiggyBank,
-  "credit-card": CreditCard,
-  "dollar-sign": DollarSign,
-  "arrow-left": ArrowLeft,
-  "chevron-down": ChevronDown,
-  "chevron-up": ChevronUp,
-  "chevron-left": ChevronLeft,
-  "chevron-right": ChevronRight,
-  "more-vertical": MoreVertical,
-  "alert-circle": AlertCircle,
-  "refresh-cw": RefreshCw,
+  'pie-chart': PieChart,
+  'trending-up': TrendingUp,
+  'trending-down': TrendingDown,
+  'bar-chart-3': BarChart3,
+  'piggy-bank': PiggyBank,
+  'credit-card': CreditCard,
+  'dollar-sign': DollarSign,
+  'arrow-left': ArrowLeft,
+  'chevron-down': ChevronDown,
+  'chevron-up': ChevronUp,
+  'chevron-left': ChevronLeft,
+  'chevron-right': ChevronRight,
+  'more-vertical': MoreVertical,
+  'alert-circle': AlertCircle,
+  'refresh-cw': RefreshCw,
 };
 
 // Common icons that should be preloaded
 const CORE_ICONS = [
-  "Plus",
-  "ArrowLeft",
-  "Settings",
-  "Home",
-  "List",
-  "TrendingUp",
-  "DollarSign",
-  "Eye",
-  "EyeOff",
+  'Plus',
+  'ArrowLeft',
+  'Settings',
+  'Home',
+  'List',
+  'TrendingUp',
+  'DollarSign',
+  'Eye',
+  'EyeOff',
 ] as const;
 
 type CoreIconName = (typeof CORE_ICONS)[number];
@@ -154,9 +153,9 @@ export function preloadCoreIcons(): void {
     CORE_ICONS.forEach((iconName) => {
       loadIcon(iconName);
     });
-    console.log("✅ Core icons preloaded");
+    console.log('✅ Core icons preloaded');
   } catch (error) {
-    console.error("Failed to preload core icons:", error);
+    console.error('Failed to preload core icons:', error);
   }
 }
 

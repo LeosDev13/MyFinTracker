@@ -30,9 +30,9 @@ export async function importWithCache<T>(modulePath: string): Promise<T> {
 /**
  * Lazy component wrapper with error boundary
  */
-export function createLazyComponent<P = {}>(
+export function createLazyComponent<P = Record<string, unknown>>(
   importFn: () => Promise<{ default: React.ComponentType<P> }>,
-  fallback?: React.ComponentType
+  _fallback?: React.ComponentType
 ) {
   return React.lazy(importFn);
 }
@@ -102,28 +102,28 @@ export class ModulePreloader {
 /**
  * Bundle size analyzer (development only)
  */
-export class BundleSizeAnalyzer {
-  private static importSizes = new Map<string, number>();
+const importSizes = new Map<string, number>();
 
-  static trackImport(moduleName: string, estimatedSize: number): void {
+export const BundleSizeAnalyzer = {
+  trackImport(moduleName: string, estimatedSize: number): void {
     if (__DEV__) {
-      this.importSizes.set(moduleName, estimatedSize);
+      importSizes.set(moduleName, estimatedSize);
       console.log(`📊 ${moduleName}: ~${estimatedSize}KB`);
     }
-  }
+  },
 
-  static getReport(): { module: string; size: number }[] {
+  getReport(): { module: string; size: number }[] {
     if (!__DEV__) return [];
 
-    return Array.from(this.importSizes.entries())
+    return Array.from(importSizes.entries())
       .map(([module, size]) => ({ module, size }))
       .sort((a, b) => b.size - a.size);
-  }
+  },
 
-  static logReport(): void {
+  logReport(): void {
     if (!__DEV__) return;
 
-    const report = this.getReport();
+    const report = BundleSizeAnalyzer.getReport();
     const totalSize = report.reduce((sum, item) => sum + item.size, 0);
 
     console.group('📦 Bundle Size Report');
@@ -132,7 +132,7 @@ export class BundleSizeAnalyzer {
       console.log(`${module}: ~${size}KB`);
     });
     console.groupEnd();
-  }
+  },
 }
 
 // Export singleton instance

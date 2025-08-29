@@ -2,13 +2,13 @@ import { Palette, X } from 'lucide-react-native';
 import type React from 'react';
 import { useState } from 'react';
 import {
+  KeyboardAvoidingView,
   Modal,
+  Platform,
   Text,
   TextInput,
   TouchableOpacity,
   View,
-  KeyboardAvoidingView,
-  Platform,
 } from 'react-native';
 import ColorPicker from './ColorPicker';
 

@@ -1,14 +1,10 @@
 import { TrendingUp, X } from 'lucide-react-native';
 import type React from 'react';
-import { useMemo, Suspense } from 'react';
+import { Suspense, useMemo } from 'react';
 import { Dimensions, Text, TouchableOpacity, View } from 'react-native';
 import { useApp, useSettings } from '../../../src/context';
 import type { WidgetProps } from '../../../src/types/widget';
-import {
-  LazyLineChart,
-  ChartSkeleton,
-  ChartErrorFallback,
-} from '../../../src/utils/ChartLazyLoader';
+import { ChartSkeleton, LazyLineChart } from '../../../src/utils/ChartLazyLoader';
 
 const screenWidth = Dimensions.get('window').width;
 

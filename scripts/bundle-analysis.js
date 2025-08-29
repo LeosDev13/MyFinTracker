@@ -21,7 +21,7 @@ class BundleAnalyzer {
     try {
       const stats = fs.statSync(filePath);
       return (stats.size / 1024).toFixed(2);
-    } catch (error) {
+    } catch (_error) {
       return 0;
     }
   }

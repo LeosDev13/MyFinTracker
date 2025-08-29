@@ -1,5 +1,6 @@
 import { Settings, Target, X } from 'lucide-react-native';
-import React, { useMemo } from 'react';
+import type React from 'react';
+import { useMemo } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { useApp, useSettings } from '../../../src/context';
 import type { WidgetProps } from '../../../src/types/widget';

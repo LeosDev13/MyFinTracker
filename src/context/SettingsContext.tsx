@@ -1,8 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import type React from 'react';
 import { createContext, useCallback, useContext, useEffect, useReducer } from 'react';
-import { RepositoryFactory } from '../repositories/RepositoryFactory';
 import type { Currency } from '../db/database';
+import { RepositoryFactory } from '../repositories/RepositoryFactory';
 
 // Types
 export interface AppSettings {

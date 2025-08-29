@@ -1,12 +1,13 @@
 import { MemoryStick, Trash2, TrendingUp } from 'lucide-react-native';
-import React, { useEffect, useState } from 'react';
+import type React from 'react';
+import { useEffect, useState } from 'react';
 import { Alert, Text, TouchableOpacity, View } from 'react-native';
 import { useApp } from '../../src/context';
 
 const MemoryStatsViewer: React.FC = () => {
   const { getMemoryStats, cleanupMemory } = useApp();
   const [stats, setStats] = useState(getMemoryStats());
-  const [refreshInterval, setRefreshInterval] = useState<NodeJS.Timeout | null>(null);
+  const [_refreshInterval, setRefreshInterval] = useState<NodeJS.Timeout | null>(null);
 
   // Refresh stats periodically
   useEffect(() => {

@@ -4,12 +4,12 @@
  */
 
 import {
+  ALLOWED_SCHEMAS,
+  buildSafeOrderByClause,
   buildSafeUpdateClause,
+  escapeLikePattern,
   validateColumnNames,
   validateSqlIdentifier,
-  escapeLikePattern,
-  buildSafeOrderByClause,
-  ALLOWED_SCHEMAS,
 } from '../SqlSafetyUtil';
 
 describe('SqlSafetyUtil', () => {

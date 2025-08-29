@@ -1,7 +1,7 @@
 import { router } from 'expo-router';
 import { ArrowLeft, Check, Plus, Settings, Trash2, X } from 'lucide-react-native';
-import React, { useMemo, useState } from 'react';
-import { FlatList, ScrollView, StatusBar, Text, TouchableOpacity, View, Alert } from 'react-native';
+import { useMemo, useState } from 'react';
+import { Alert, FlatList, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import { useWidgets } from '../src/context';
 import type { WidgetType } from '../src/types/widget';
 import { AVAILABLE_WIDGETS } from '../src/types/widget';
@@ -30,7 +30,7 @@ const WidgetManagementScreen = () => {
   const handleAddWidget = async (type: WidgetType) => {
     try {
       await addWidget(type);
-    } catch (error) {
+    } catch (_error) {
       Alert.alert('Error', 'Failed to add widget');
     }
   };
@@ -44,7 +44,7 @@ const WidgetManagementScreen = () => {
         onPress: async () => {
           try {
             await removeWidget(widgetId);
-          } catch (error) {
+          } catch (_error) {
             Alert.alert('Error', 'Failed to remove widget');
           }
         },
@@ -55,7 +55,7 @@ const WidgetManagementScreen = () => {
   const handleToggleWidget = async (widgetId: string) => {
     try {
       await toggleWidget(widgetId);
-    } catch (error) {
+    } catch (_error) {
       Alert.alert('Error', 'Failed to toggle widget');
     }
   };

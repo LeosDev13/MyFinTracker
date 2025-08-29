@@ -3,9 +3,9 @@ import {
   FlatList,
   type ListRenderItem,
   RefreshControl,
+  type StyleProp,
   Text,
   View,
-  type StyleProp,
   type ViewStyle,
 } from 'react-native';
 import type { Transaction } from '../../src/db/database';

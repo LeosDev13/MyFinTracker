@@ -1,6 +1,6 @@
 import type React from 'react';
 import { lazy } from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
+import { ActivityIndicator, Text, View } from 'react-native';
 
 // Lazy load heavy screens for better initial load performance
 // These screens contain complex logic, charts, or heavy dependencies

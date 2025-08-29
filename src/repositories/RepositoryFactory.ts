@@ -1,7 +1,7 @@
 import type * as SQLite from 'expo-sqlite';
-import { TransactionRepository } from './TransactionRepository';
+import type { Currency, Settlement, TransactionType } from '../db/database';
 import { CategoryRepository } from './CategoryRepository';
-import type { Currency, TransactionType, Settlement } from '../db/database';
+import { TransactionRepository } from './TransactionRepository';
 
 export class RepositoryFactory {
   private static instance: RepositoryFactory;

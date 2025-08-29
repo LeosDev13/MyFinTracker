@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import { ArrowLeft, Plus, Settings, Trash2, Grid3X3 } from 'lucide-react-native';
+import { ArrowLeft, Grid3X3, Plus, Settings, Trash2 } from 'lucide-react-native';
 import { useState } from 'react';
 import { Alert, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import { useApp, useSettings } from '../src/context';

@@ -1,13 +1,10 @@
-import { X } from "lucide-react-native";
-import React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
-import { useApp, useSettings } from "../../../src/context";
-import type { WidgetProps } from "../../../src/types/widget";
+import { X } from 'lucide-react-native';
+import type React from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
+import { useApp, useSettings } from '../../../src/context';
+import type { WidgetProps } from '../../../src/types/widget';
 
-const RecentTransactionsWidget: React.FC<WidgetProps> = ({
-  widget,
-  onRemove,
-}) => {
+const RecentTransactionsWidget: React.FC<WidgetProps> = ({ widget, onRemove }) => {
   const { state } = useApp();
   const { getFormattedCurrency, getFormattedDate } = useSettings();
 
@@ -16,9 +13,7 @@ const RecentTransactionsWidget: React.FC<WidgetProps> = ({
   return (
     <View className="bg-white rounded-xl p-4 shadow-sm mb-4">
       <View className="flex-row items-center justify-between mb-3">
-        <Text className="text-base font-bold text-gray-900">
-          {widget.title}
-        </Text>
+        <Text className="text-base font-bold text-gray-900">{widget.title}</Text>
         {onRemove && (
           <TouchableOpacity onPress={() => onRemove(widget.id)} className="p-1">
             <X size={16} color="#6B7280" />
@@ -28,9 +23,7 @@ const RecentTransactionsWidget: React.FC<WidgetProps> = ({
 
       {recentTransactions.length === 0 ? (
         <View className="py-4">
-          <Text className="text-gray-500 text-center text-sm">
-            No recent transactions
-          </Text>
+          <Text className="text-gray-500 text-center text-sm">No recent transactions</Text>
         </View>
       ) : (
         <View>
@@ -38,16 +31,11 @@ const RecentTransactionsWidget: React.FC<WidgetProps> = ({
             <View
               key={transaction.id}
               className={`flex-row justify-between items-center py-2 ${
-                index < recentTransactions.length - 1
-                  ? "border-b border-gray-100"
-                  : ""
+                index < recentTransactions.length - 1 ? 'border-b border-gray-100' : ''
               }`}
             >
               <View className="flex-1 pr-3">
-                <Text
-                  className="text-sm text-gray-800 font-medium"
-                  numberOfLines={1}
-                >
+                <Text className="text-sm text-gray-800 font-medium" numberOfLines={1}>
                   {transaction.note}
                 </Text>
                 <Text className="text-xs text-gray-500 mt-0.5">
@@ -60,14 +48,14 @@ const RecentTransactionsWidget: React.FC<WidgetProps> = ({
                   className={`text-sm font-semibold ${
                     // @ts-ignore - is_fully_compensated might not be in basic Transaction type
                     transaction.is_fully_compensated
-                      ? "text-gray-400 line-through"
-                      : transaction.type_name === "Income"
-                      ? "text-green-600"
-                      : "text-red-600"
+                      ? 'text-gray-400 line-through'
+                      : transaction.type_name === 'Income'
+                        ? 'text-green-600'
+                        : 'text-red-600'
                   }`}
                   numberOfLines={1}
                 >
-                  {transaction.type_name === "Income" ? "+" : "-"}
+                  {transaction.type_name === 'Income' ? '+' : '-'}
                   {getFormattedCurrency(
                     // @ts-ignore - remaining_amount might not be in basic Transaction type
                     transaction.remaining_amount ?? transaction.amount,
@@ -76,9 +64,7 @@ const RecentTransactionsWidget: React.FC<WidgetProps> = ({
                 </Text>
                 {/* @ts-ignore - is_fully_compensated might not be in basic Transaction type */}
                 {transaction.is_fully_compensated && (
-                  <Text className="text-xs text-green-600 mt-0.5">
-                    Compensated
-                  </Text>
+                  <Text className="text-xs text-green-600 mt-0.5">Compensated</Text>
                 )}
               </View>
             </View>
@@ -89,6 +75,6 @@ const RecentTransactionsWidget: React.FC<WidgetProps> = ({
   );
 };
 
-RecentTransactionsWidget.displayName = "RecentTransactionsWidget";
+RecentTransactionsWidget.displayName = 'RecentTransactionsWidget';
 
 export default RecentTransactionsWidget;

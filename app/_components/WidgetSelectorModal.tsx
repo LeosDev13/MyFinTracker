@@ -9,8 +9,8 @@ import {
   X,
   Zap,
 } from 'lucide-react-native';
-import React from 'react';
-import { FlatList, Modal, Text, TouchableOpacity, View, type ListRenderItem } from 'react-native';
+import type React from 'react';
+import { FlatList, type ListRenderItem, Modal, Text, TouchableOpacity, View } from 'react-native';
 import { useWidgets } from '../../src/context';
 import type { WidgetType } from '../../src/types/widget';
 import { AVAILABLE_WIDGETS } from '../../src/types/widget';

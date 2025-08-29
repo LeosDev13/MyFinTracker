@@ -1,5 +1,6 @@
 import { X } from 'lucide-react-native';
-import React, { useMemo } from 'react';
+import type React from 'react';
+import { useMemo } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import Svg, { Circle, G } from 'react-native-svg';
 import { useApp } from '../../../src/context';

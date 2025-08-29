@@ -1,23 +1,21 @@
 // Export all context providers and hooks
-export { AppProvider, useApp } from './AppContext';
-export { SettingsProvider, useSettings } from './SettingsContext';
-export { WidgetProvider, useWidgets } from './WidgetContext';
 
 // Export types for TypeScript users
 export type {
-  AppState,
   AppContextType,
-  LoadingState,
+  AppState,
   ErrorState,
+  LoadingState,
 } from './AppContext';
-
+export { AppProvider, useApp } from './AppContext';
 export type {
   AppSettings,
-  SettingsState,
   SettingsContextType,
+  SettingsState,
 } from './SettingsContext';
-
+export { SettingsProvider, useSettings } from './SettingsContext';
 export type {
-  WidgetState,
   WidgetContextType,
+  WidgetState,
 } from './WidgetContext';
+export { useWidgets, WidgetProvider } from './WidgetContext';

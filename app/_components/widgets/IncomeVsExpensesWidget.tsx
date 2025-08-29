@@ -1,5 +1,6 @@
 import { BarChart3, X } from 'lucide-react-native';
-import React, { useMemo } from 'react';
+import type React from 'react';
+import { useMemo } from 'react';
 import { Dimensions, Text, TouchableOpacity, View } from 'react-native';
 import { BarChart } from 'react-native-chart-kit';
 import { useApp, useSettings } from '../../../src/context';

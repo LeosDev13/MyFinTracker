@@ -1,8 +1,8 @@
+import Slider from '@react-native-community/slider';
 import { Palette, X } from 'lucide-react-native';
 import type React from 'react';
 import { useCallback, useState } from 'react';
 import { Modal, Text, TouchableOpacity, View } from 'react-native';
-import Slider from '@react-native-community/slider';
 import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 
 interface ColorPickerProps {

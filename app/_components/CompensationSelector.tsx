@@ -1,6 +1,6 @@
 import { Check } from 'lucide-react-native';
 import React from 'react';
-import { FlatList, Text, TouchableOpacity, View, type ListRenderItem } from 'react-native';
+import { FlatList, type ListRenderItem, Text, TouchableOpacity, View } from 'react-native';
 import type { Transaction } from '../../src/db/database';
 
 interface CompensationSelectorProps {

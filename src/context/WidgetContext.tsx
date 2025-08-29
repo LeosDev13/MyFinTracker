@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { createContext, useCallback, useContext, useEffect, useReducer } from 'react';
+import type React from 'react';
+import { createContext, useCallback, useContext, useEffect, useReducer } from 'react';
 import type { Widget, WidgetType } from '../types/widget';
 import { AVAILABLE_WIDGETS } from '../types/widget';
 
@@ -19,7 +20,7 @@ export interface WidgetContextType {
   removeWidget: (widgetId: string) => Promise<void>;
   reorderWidgets: (widgetIds: string[]) => Promise<void>;
   toggleWidget: (widgetId: string) => Promise<void>;
-  updateWidgetConfig: (widgetId: string, config: Record<string, any>) => Promise<void>;
+  updateWidgetConfig: (widgetId: string, config: Record<string, unknown>) => Promise<void>;
   resetToDefaults: () => Promise<void>;
 }
 
@@ -91,7 +92,7 @@ function widgetReducer(state: WidgetState, action: WidgetAction): WidgetState {
         ),
       };
 
-    case 'REORDER_WIDGETS':
+    case 'REORDER_WIDGETS': {
       const reorderedWidgets = action.payload
         .map((id, index) => {
           const widget = state.widgets.find((w) => w.id === id);
@@ -100,6 +101,7 @@ function widgetReducer(state: WidgetState, action: WidgetAction): WidgetState {
         .filter(Boolean) as Widget[];
 
       return { ...state, widgets: reorderedWidgets };
+    }
 
     case 'SET_INITIALIZED':
       return { ...state, isInitialized: action.payload };
@@ -266,7 +268,7 @@ export const WidgetProvider: React.FC<WidgetProviderProps> = ({ children }) => {
 
   // Update widget config
   const updateWidgetConfig = useCallback(
-    async (widgetId: string, config: Record<string, any>): Promise<void> => {
+    async (widgetId: string, config: Record<string, unknown>): Promise<void> => {
       try {
         const updatedWidgets = state.widgets.map((w) =>
           w.id === widgetId ? { ...w, config: { ...w.config, ...config } } : w

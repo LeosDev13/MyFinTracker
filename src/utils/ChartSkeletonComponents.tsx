@@ -1,5 +1,5 @@
 import type React from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
+import { ActivityIndicator, Text, View } from 'react-native';
 
 export interface ChartSkeletonProps {
   height?: number;

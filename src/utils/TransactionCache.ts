@@ -27,7 +27,6 @@ export class TransactionCache {
   private cache: Map<number, TransactionWithCompensation> = new Map();
   private windows: CacheWindow[] = [];
   private totalCount: number = 0;
-  private currentWindow: CacheWindow | null = null;
 
   constructor(config: Partial<CacheConfig> = {}) {
     this.config = {
